@@ -64,12 +64,24 @@ function expenseAdd(newExpense) {
     // adicionando nome e categoria na info.
     expenseInfo.append(expenseName, expenseCategory);
 
+    // adicionando valor.
+    const expenseAmount = document.createElement("span");
+    expenseAmount.classList.add("expense-amount");
+    expenseAmount.innerHTML = `<small>R$</small>${newExpense.amount
+      .toUpperCase()
+      .replace("R$", "")}`;
+
+    // adicionando icone de remover.
+    const removeIcon = document.createElement("img");
+    removeIcon.classList.add("remove-icon");
+    removeIcon.setAttribute("alt", "remover");
+    removeIcon.setAttribute("src", "./img/remove.svg");
+
     // Adicionando informações no item.
-    expenseItem.append(expenseIcon, expenseInfo);
+    expenseItem.append(expenseIcon, expenseInfo, expenseAmount, removeIcon);
 
     // Adicionando informações na lista.
     expenseList.append(expenseItem);
-
   } catch (error) {
     alert("Não foi possivel atualizar a lista de despesas.");
     console.error(error);
