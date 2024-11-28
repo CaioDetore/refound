@@ -85,7 +85,7 @@ function expenseAdd(newExpense) {
     // Adicionando informações na lista.
     expenseList.append(expenseItem);
 
-    // Atualiza os totais.
+    formClear();
     updateTotals();
   } catch (error) {
     alert("Não foi possivel atualizar a lista de despesas.");
@@ -95,7 +95,7 @@ function expenseAdd(newExpense) {
 
 function updateTotals() {
   try {
-    // Recupera todos os itens (li) da lista (ul
+    // Recupera todos os itens (li) da lista (ul).
     const items = expenseList.children;
 
     // Atualiza a qtd de itens.
@@ -103,39 +103,60 @@ function updateTotals() {
       items.length > 1 ? "despesas" : "despesa"
     }`;
 
-    // Calculando total
-    let total = 0
+    // Calculando total.
+    let total = 0;
 
-    // percorre cada item (li) da lista (ul)
+    // percorre cada item (li) da lista (ul).
     for (let item = 0; item < items.length; item++) {
-      const itemAmount = items[item].querySelector(".expense-amount")
+      const itemAmount = items[item].querySelector(".expense-amount");
 
       // remove caracteres nao númericos
-      let value = itemAmount.textContent.replace(/[^\d,]/g, "")
+      let value = itemAmount.textContent.replace(/[^\d,]/g, "");
 
-      value = parseFloat(value)
+      value = parseFloat(value);
 
       if (isNaN(value)) {
         return alert(
           "Não foi possível calcular o total. O valor precisa ser um número."
-        )
+        );
       }
 
       // incrementar o valor
-      total += Number(value)
+      total += Number(value);
     }
 
-    // criando elementos e conteudo
-    const symbolBRL = document.createElement("small")
-    symbolBRL.textContent = "R$"
+    // criando elementos e conteudo.
+    const symbolBRL = document.createElement("small");
+    symbolBRL.textContent = "R$";
 
-    total = formatCurrencyBRL(total).toUpperCase().replace("R$", "")
-    
-    expenseTotal.innerHTML = "" 
-    
-    expenseTotal.append(symbolBRL, total)
+    total = formatCurrencyBRL(total).toUpperCase().replace("R$", "");
+
+    expenseTotal.innerHTML = "";
+
+    expenseTotal.append(symbolBRL, total);
   } catch (error) {
     console.error(error);
     alert("Não foi possível atualizar o total");
   }
+}
+
+// Evento que captura o clique nos itens da lista.
+expenseList.addEventListener("click", function (event) {
+  // Verifica se o elemento clicado é o icone remover.
+  if (event.target.classList.contains("remove-icon")) {
+    // Obtém a li pai do elemento clicado. ("o pai mais próximo")
+    const item = event.target.closest(".expense");
+    item.remove();
+  }
+
+  updateTotals();
+});
+
+function formClear() {
+  amount.value = "";
+  expense.value = "";
+  category.value = "";
+  category.value = "";
+
+  expense.focus();
 }
