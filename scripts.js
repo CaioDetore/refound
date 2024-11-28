@@ -6,6 +6,7 @@ const category = document.getElementById("category");
 
 // Elementos da lista.
 const expenseList = document.querySelector("ul");
+const expenseTotal = document.querySelector("aside header h2");
 const expenseQuantity = document.querySelector("aside header p span");
 
 // Formatar valor do input.
@@ -101,8 +102,40 @@ function updateTotals() {
     expenseQuantity.textContent = `${items.length} ${
       items.length > 1 ? "despesas" : "despesa"
     }`;
+
+    // Calculando total
+    let total = 0
+
+    // percorre cada item (li) da lista (ul)
+    for (let item = 0; item < items.length; item++) {
+      const itemAmount = items[item].querySelector(".expense-amount")
+
+      // remove caracteres nao númericos
+      let value = itemAmount.textContent.replace(/[^\d,]/g, "")
+
+      value = parseFloat(value)
+
+      if (isNaN(value)) {
+        return alert(
+          "Não foi possível calcular o total. O valor precisa ser um número."
+        )
+      }
+
+      // incrementar o valor
+      total += Number(value)
+    }
+
+    // criando elementos e conteudo
+    const symbolBRL = document.createElement("small")
+    symbolBRL.textContent = "R$"
+
+    total = formatCurrencyBRL(total).toUpperCase().replace("R$", "")
+    
+    expenseTotal.innerHTML = "" 
+    
+    expenseTotal.append(symbolBRL, total)
   } catch (error) {
     console.error(error);
-    alert("Não foi possível atualizar os totais");
+    alert("Não foi possível atualizar o total");
   }
 }
